@@ -25,23 +25,114 @@ ngrok http 5173
 - Go to the ngrok URL (like `https://abc123.ngrok-free.app`)
 - Your app will work perfectly!
 
-## Alternative: PowerShell Method
-```powershell
-# Download ngrok directly with PowerShell
-Invoke-WebRequest -Uri "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip" -OutFile "ngrok.zip"
-Expand-Archive -Path "ngrok.zip" -DestinationPath "C:\ngrok"
-cd C:\ngrok
-.\ngrok.exe http 5173
-```
+# 🚀 Remote Control System - Deployment & Access Guide
 
-## Why This Works:
-- University networks block device-to-device communication
-- ngrok creates a secure tunnel through the internet
-- Your phone connects through ngrok's servers
-- Bypasses all university firewall restrictions
+## 🧪 Local Development Setup
 
-## 🎯 Next Steps:
-1. Keep your dev server running: `npm run dev`
-2. In a NEW command prompt, run ngrok
-3. Use the ngrok URL on your phone
-4. Enjoy your remote control app!
+1. **Start the Vite development server**
+   ```bash
+   npm run dev
+   ```
+
+   This will expose the app at:
+   ```
+   http://192.168.x.x:5173/
+   ```
+
+2. **Set the local IP in your frontend code**
+
+   In `app.js`, replace:
+   ```js
+   const serverURL = window.location.origin;
+   ```
+   with:
+   ```js
+   const serverURL = 'http://192.168.x.x:3000'; // Use your local IP
+   this.socket = io(serverURL, {
+     transports: ['websocket']
+   });
+   ```
+
+## 🔐 Enable HTTPS for Microphone (Voice Commands) via Ngrok
+
+1. **Start an HTTPS tunnel with ngrok**
+   ```bash
+   ngrok http 5173
+   ```
+
+   You’ll receive a public HTTPS URL like:
+   ```
+   https://abc123.ngrok-free.app
+   ```
+
+2. **Update socket URL in `app.js`**
+   ```js
+   const serverURL = window.location.origin;
+   this.socket = io(serverURL, {
+     transports: ['websocket'],
+     secure: true
+   });
+   ```
+
+3. **Update `vite.config.js` to allow ngrok**
+   ```js
+   import { defineConfig } from 'vite';
+
+   export default defineConfig({
+     server: {
+       host: '0.0.0.0',
+       port: 5173,
+       allowedHosts: ['.ngrok-free.app']
+     },
+     base: '/SXR-demo/', // Use your GitHub repo name
+     build: {
+       outDir: 'docs',
+       assetsDir: 'assets'
+     },
+     publicDir: 'public'
+   });
+   ```
+
+---
+
+## 🌍 Deploy to GitHub Pages
+
+1. **Ensure correct `base` in `vite.config.js`**
+   ```js
+   base: '/SXR-demo/', // Your GitHub repo name
+   ```
+
+2. **Build the app**
+   ```bash
+   npm run build
+   ```
+
+3. **Deploy to GitHub Pages**
+   ```bash
+   npm run deploy
+   ```
+
+4. **GitHub Pages settings**
+   - Go to your repo → Settings → Pages
+   - Choose `main` branch and `/docs` folder
+
+---
+
+## ✅ Access Summary
+
+- Local Development:
+  ```
+  http://192.168.x.x:5173/SXR-demo/
+  ```
+
+- HTTPS via Ngrok:
+  ```
+  https://abc123.ngrok-free.app
+  ```
+
+- GitHub Pages (static only, no screen share or socket):
+  ```
+  https://ziemnono.github.io/SXR-demo/
+  ```
+
+---

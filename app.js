@@ -210,7 +210,13 @@ class RemoteControlSystem {
     executeCommand(data) {
         const { command, timestamp } = data;
         this.addToCommandLog(`Voice Command: "${command}"`);
-        
+        if (command.toLowerCase().includes('open browser')) {
+            window.open('https://www.google.com', '_blank');
+        }
+
+        if (command.toLowerCase().includes('say hello')) {
+            alert('Hello from your laptop!');
+        }
         // Simulate command execution
         setTimeout(() => {
             this.addToCommandLog(`Executed: ${command}`);
