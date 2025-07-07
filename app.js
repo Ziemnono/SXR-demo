@@ -58,7 +58,7 @@ class RemoteControlSystem {
     }
     
     setupSocketConnection() {
-        const serverURL = 'http://192.168.1.119:3000';;
+        const serverURL = 'https://9bfa-211-27-4-195.ngrok-free.app';
 
         this.socket = io(serverURL, {
         transports: ['websocket']

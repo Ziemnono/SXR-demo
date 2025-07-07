@@ -16,9 +16,9 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/SXR-demo/', // 👈 your GitHub repo name
+  base: '/SXR-demo/', // 👈 Important for GitHub Pages
   server: {
-    host: '192.168.1.119', // 👈 your local IP
+    host: true, // 👈 your local IP
     port: 5173
   },
   build: {
