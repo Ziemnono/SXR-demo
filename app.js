@@ -58,7 +58,7 @@ class RemoteControlSystem {
     }
     
     setupSocketConnection() {
-        const serverURL = `${window.location.protocol}//${window.location.hostname}:3000`;
+        const serverURL = 'http://192.168.1.119:3000';;
 
         this.socket = io(serverURL, {
         transports: ['websocket']
