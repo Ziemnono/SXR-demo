@@ -22,6 +22,8 @@ app.use(express.static('dist'));
 // Store connected devices
 const connectedDevices = new Map();
 
+import { exec } from 'child_process';
+
 io.on('connection', (socket) => {
   console.log('Device connected:', socket.id);
 
@@ -40,8 +42,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('voice-command', (data) => {
-    console.log('Voice command received:', data.command);
-    // Forward voice command to laptop
+    const { command } = data;
+    console.log('Voice command received:', command);
+
+    // 👉 Trigger action based on command
+    if (command.toLowerCase().includes('open browser')) {
+      exec('start chrome "https://www.google.com"', (err) => {
+        if (err) console.error('Failed to open browser:', err);
+        else console.log('Browser opened successfully');
+      });
+    }
+
+    // 👉 Still emit to frontend for visual feedback/logging
     socket.broadcast.emit('execute-command', data);
   });
 
